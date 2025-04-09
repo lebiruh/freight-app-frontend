@@ -8,6 +8,7 @@ import addOrderRoute from './routes/order.route.js';
 import authRoutes from "./routes/auth.route.js";
 import getPendingOrdersRoutes from "./routes/getPendingOrders.route.js";
 import getPendingOrderByIdRoutes from "./routes/getPendingOrderById.route.js";
+import getPendingOrdersBySearchRoutes from "./routes/getPendingOrdersBySearch.route.js";
 import getUserByRoleRoutes from "./routes/getUserByRole.route.js";
 
 
@@ -29,6 +30,7 @@ app.use('/api/auth', authRoutes);
 app.use("/api/order", addOrderRoute);
 app.use("/api/orders", getPendingOrdersRoutes);
 app.use("/api/find-order", getPendingOrderByIdRoutes);
+app.use("/api/find-orders/pending", getPendingOrdersBySearchRoutes);
 app.use("/api/admin", getUserByRoleRoutes);
 
 app.listen(port, () => {

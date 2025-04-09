@@ -63,3 +63,15 @@ export const getDbPendingFreightOrderById = async (jobId) => {
     console.log(error);
   }
 };
+
+export const getDbPendingFreightOrdersBySearch = async (searchTerm) => {  
+
+  const q = "SELECT * FROM freight WHERE start_location LIKE ? OR end_location LIKE ? LIMIT 5"
+
+  try {
+    const response = await conn.query(q, [`${searchTerm}%`, `${searchTerm}%`]);
+    return response[0];
+  } catch (error) {
+    console.log(error);
+  }  
+}

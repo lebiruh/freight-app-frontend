@@ -1,4 +1,4 @@
-import {addDbFreightOrder, getDbPendingFreightOrders, getDbPendingFreightOrderById} from '../services/order.services.js'
+import {addDbFreightOrder, getDbPendingFreightOrders, getDbPendingFreightOrderById, getDbPendingFreightOrdersBySearch} from '../services/order.services.js'
 
 export const addFreightOrder = async (req, res) => {
 
@@ -33,6 +33,19 @@ export const getPendingFreightOrderById = async (req, res) => {
     const jobId = req.params.jobId;
 
     const response =  await getDbPendingFreightOrderById(jobId);
+
+    if (!response)  return res.status(500).json({message: "Something went wrong. Please try again later."});
+
+    return res.status(200).json(response);
+  
+};
+
+export const getPendingFreightOrdersBySearch = async (req, res) => {
+
+    const searchTerm = req.query.q;
+
+    
+    const response =  await getDbPendingFreightOrdersBySearch(searchTerm);
 
     if (!response)  return res.status(500).json({message: "Something went wrong. Please try again later."});
 
