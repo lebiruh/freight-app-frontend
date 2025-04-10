@@ -32,7 +32,7 @@ export const getDbUser = async (userPhoneNo) => {
 
   try {
     const response = await conn.query(q, [userPhoneNo]);
-    console.log(response);
+    // console.log(response);
     return response[0];
   } catch (error) {
     console.log(error);

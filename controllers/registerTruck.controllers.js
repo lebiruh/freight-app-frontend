@@ -21,18 +21,18 @@ export const registerTruck = async (req, res) => {
 
   const ownerId = ownerData[0].userId;
 
-  console.log("owner Id is: ", ownerId);
+  // console.log("owner Id is: ", ownerId);
 
   //CREATE NEW USER
   //Hash password
   // const salt = await bcrypt.genSalt(10);
   // const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
-  const values = [ownerId, req.body.plate_no, req.body.truck_type, req.body.load_amount, req.body.driver_name, req.body.driver_phone_no, req.body.truck_model, req.body.chassis_number, req.body.engine_number, req.body.region, true, moment(Date.now()).format("YYYY-MM-DD HH:mm:ss")];
+  const values = [ownerId, req.body.plate_no, req.body.truck_type, req.body.load_amount, req.body.driver_name, req.body.driver_phone_no, req.body.truck_model, req.body.chassis_number, req.body.engine_number, req.body.region, req.body.availability, moment(Date.now()).format("YYYY-MM-DD HH:mm:ss")];
 
   const response = await registerDbTruck(values);
   if (response.affectedRows === 1) {
-    return res.status(200).json("User has been created.");
+    return res.status(200).json("Truck has been registered.");
   }
 }
 

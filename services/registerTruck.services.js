@@ -8,6 +8,7 @@ export const registerDbTruck = async (values) => {
 
   try {
     const response = await conn.query(q, [values]);
+    // console.log(response);
     return response[0];
    } catch (error) {
     console.log(error);
