@@ -1,12 +1,13 @@
 import express from 'express';
-import { logIn } from '../controllers/auth.controllers.js';
+import { logIn, registerClient, registerTruckOwner } from '../controllers/auth.controllers.js';
 // import {setHeaders} from "../middleware/middleware.js"
 
 
 const router = express.Router();
 
 
-// router.post('/register', register);
+router.post('/client/register', registerClient);
+router.post('/truck-owner/register', registerTruckOwner);
 router.post('/login', logIn);
 // router.post('/logout', logOut);
 

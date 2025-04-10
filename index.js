@@ -10,6 +10,8 @@ import getPendingOrdersRoutes from "./routes/getPendingOrders.route.js";
 import getPendingOrderByIdRoutes from "./routes/getPendingOrderById.route.js";
 import getPendingOrdersBySearchRoutes from "./routes/getPendingOrdersBySearch.route.js";
 import getUserByRoleRoutes from "./routes/getUserByRole.route.js";
+import registerTruckRoutes from "./routes/registerTruck.route.js";
+import getAllTrucksRoutes from "./routes/getAllTrucks.route.js";
 
 
 
@@ -32,6 +34,8 @@ app.use("/api/orders", getPendingOrdersRoutes);
 app.use("/api/find-order", getPendingOrderByIdRoutes);
 app.use("/api/find-orders/pending", getPendingOrdersBySearchRoutes);
 app.use("/api/admin", getUserByRoleRoutes);
+app.use("/api/register", registerTruckRoutes);
+app.use("/api/trucks", getAllTrucksRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

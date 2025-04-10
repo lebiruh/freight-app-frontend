@@ -2,7 +2,7 @@ import conn from "../config/db.config.js"
 
 export const getDbUserByRole = async (userRole) => {  
 
-  const q = "SELECT `userId`, `name`, `email`, `phone`, `createdAt` FROM users WHERE user_type = ?"
+  const q = "SELECT `userId`, `name`, `last_name`, `email`, `phone`, `createdAt` FROM users WHERE user_type = ?"
 
   try {
     const response = await conn.query(q, [userRole]);

@@ -1,8 +1,65 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
-import { getDbUser } from "../services/auth.services.js";
+import moment from "moment";
+import { getDbUser, registerDbClient, registerDbTruckOwner } from "../services/auth.services.js";
 
+export const registerClient = async (req, res) => {
 
+  //Check if valid data is provided
+  if (!req.body.firstName || !req.body.lastName || !req.body.password || !req.body.phone || !req.body.userType) {
+    return res.status(400).json({message: "Please fill all the required fields!"});
+  } 
+
+  //CHECK if USER EXISTS
+  const userPhone = req.body.phone;
+
+  const data = await getDbUser(userPhone);
+
+  if (!data)  return res.status(500).json({message: "Something went wrong. Please try again later."});
+  
+  if(data.length > 0) return res.status(409).json({message: "User already exists!"});
+
+  //CREATE NEW USER
+  //Hash password
+  // const salt = await bcrypt.genSalt(10);
+  // const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
+  const values = [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.body.phone, req.body.userType, moment(Date.now()).format("YYYY-MM-DD HH:mm:ss")];
+
+  const response = await registerDbClient(values);
+  if (response.affectedRows === 1) {
+    return res.status(200).json("User has been created.");
+  }
+}
+
+export const registerTruckOwner = async (req, res) => {
+
+  //Check if valid data is provided
+  if (!req.body.firstName || !req.body.lastName || !req.body.phone || !req.body.userType) {
+    return res.status(400).json({message: "Please fill all the required fields!"});
+  } 
+
+  //CHECK if USER EXISTS
+  const userPhone = req.body.phone;
+
+  const data = await getDbUser(userPhone);
+
+  if (!data)  return res.status(500).json({message: "Something went wrong. Please try again later."});
+  
+  if(data.length > 0) return res.status(409).json({message: "User already exists!"});
+
+  //CREATE NEW USER
+  //Hash password
+  // const salt = await bcrypt.genSalt(10);
+  // const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
+  const values = [req.body.firstName, req.body.lastName, req.body.email, req.body.phone, req.body.userType, moment(Date.now()).format("YYYY-MM-DD HH:mm:ss")];
+
+  const response = await registerDbTruckOwner(values);
+  if (response.affectedRows === 1) {
+    return res.status(200).json("User has been created.");
+  }
+}
 
 export const logIn = async(req, res) => {
 
@@ -11,7 +68,7 @@ export const logIn = async(req, res) => {
 
   //Check if valid data is provided
   if (!req.body.phone || !req.body.password) {
-    return res.status(400).json("Please fill all the required fields!");
+    return res.status(400).json({message: "Please fill all the required fields!"});
   } 
 
   //CHECK if USER EXISTS
