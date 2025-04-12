@@ -38,3 +38,16 @@ export const getDbUser = async (userPhoneNo) => {
     console.log(error);
   }  
 }
+
+export const getDbUserById = async (userId) => {
+
+  const q = "SELECT * FROM users WHERE userId IN (?)"
+
+  try {
+    const response = await conn.query(q, [userId]);
+    // console.log(response);
+    return response[0];
+  } catch (error) {
+    console.log(error);
+  } 
+};

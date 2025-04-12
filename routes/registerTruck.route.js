@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerTruck } from '../controllers/registerTruck.controllers.js';
+import { registerTruck } from '../controllers/truck.controllers.js';
 // import {setHeaders} from "../middleware/middleware.js"
 
 

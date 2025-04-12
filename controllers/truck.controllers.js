@@ -1,6 +1,6 @@
 import moment from "moment";
-import { getDbUser } from "../services/auth.services.js";
-import { getDbAllTrucks, registerDbTruck } from "../services/registerTruck.services.js";
+import { getDbUser, getDbUserById } from "../services/auth.services.js";
+import { getDbAllTrucks, getDbAvailableTrucksByType, registerDbTruck, upDateDbTruckAvailability } from "../services/truck.services.js";
 
 export const registerTruck = async (req, res) => {
 
@@ -46,6 +46,66 @@ export const getAllTrucks = async (req, res) => {
   // console.log("Submitted order to controller is: ", req.body);
 
   const response =  await getDbAllTrucks(req, res);
+
+  if (!response)  return res.status(500).json({message: "Something went wrong. Please try again later."});
+
+  return res.status(200).json(response);
+};
+
+export const getAvailableTrucksByType = async(req, res) => {
+
+  // console.log("User role is: ", req.params)
+  // console.log("logIn headers: ", req.headers)
+
+  //Check if valid data is provided
+  if (!req.params.truckType) {
+    return res.status(400).json("No Truck Type Selected!");
+  } 
+
+  const truckType = req.params.truckType;
+
+  // console.log(truckType);
+
+  const data = await getDbAvailableTrucksByType(truckType);
+
+  // console.log("data is: ", data);
+  if (!data)  return res.status(500).json({message: "Something went wrong. Please try again later."});
+  
+  if(data.length === 0) return res.status(400).json({message: "No Trucks found!"})
+
+
+  // Extract the required data to be sent to the user
+  const ownerId = data?.map((own) => {
+    const id = own?.ownerId;    
+    return id;
+  })
+
+  const owner = await getDbUserById(ownerId);
+  
+  const fullTruckInfo = [];
+
+  // Assuming both arrays have the same length
+  for (let i = 0; i < owner.length; i++) {
+    fullTruckInfo.push({ ...data[i], ...owner[i] });
+  }
+
+  // console.log(fullTruckInfo);
+
+  return res.status(200).json(fullTruckInfo);
+}
+
+export const updateTruckAvailability = async (req, res) => {
+
+  const truckId = req.params.truckId;
+
+  // if (!token) return res.status(401).json("Not logged in");
+
+  // if (!req.body.content) return res.status(400).json("No content");
+  // console.log("added post on controller: ", req.body);
+
+  // console.log("Submitted order to controller is: ", req.body);
+
+  const response =  await upDateDbTruckAvailability(truckId);
 
   if (!response)  return res.status(500).json({message: "Something went wrong. Please try again later."});
 

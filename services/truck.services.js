@@ -31,3 +31,32 @@ export const getDbAllTrucks = async (req, res) => {
     console.log(error);
   }
 };
+
+export const getDbAvailableTrucksByType = async (truckType) => { 
+
+  const q = "SELECT * FROM trucks WHERE truck_type = ? AND availability = true"
+
+  try {
+    const response = await conn.query(q, [truckType]);
+    // console.log(response);
+    return response[0];
+  } catch (error) {
+    console.log(error);
+  }  
+}
+
+export const upDateDbTruckAvailability= async (truckId) => { 
+
+  const q = "UPDATE trucks SET `availability` = '1' WHERE truckId = ?"; 
+
+  // const q = "SELECT * FROM trucks WHERE truck_type = ? AND availability = true"
+
+  try {
+    const response = await conn.query(q, [truckId]);
+    // console.log(response);
+    return response[0];
+  } catch (error) {
+    console.log(error);
+  }  
+}
+
