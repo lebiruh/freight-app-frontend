@@ -19,8 +19,8 @@ export const registerDbTruckOwner = async (values) => {
 
   try {
     const response = await conn.query(insertQuery, [values]);
-    console.log(response);
-    // return response[0];
+    // console.log(response);
+    return response[0];
   } catch (error) {
     console.log(error);
   }  

@@ -66,7 +66,7 @@ export const getDbPendingFreightOrderById = async (jobId) => {
 
 export const getDbPendingFreightOrdersBySearch = async (searchTerm) => {  
 
-  const q = "SELECT * FROM freight WHERE start_location LIKE ? OR end_location LIKE ? LIMIT 5"
+  const q = "SELECT * FROM freight WHERE start_location LIKE ? OR end_location LIKE ?"
 
   try {
     const response = await conn.query(q, [`${searchTerm}%`, `${searchTerm}%`]);

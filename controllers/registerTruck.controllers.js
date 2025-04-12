@@ -17,7 +17,7 @@ export const registerTruck = async (req, res) => {
 
   if (!ownerData)  return res.status(500).json({message: "Something went wrong. Please try again later."});
   
-  if(ownerData.length === 0) return res.status(400).json({message: "Truck owner not found!"});
+  if(ownerData?.length === 0) return res.status(400).json({message: "Truck owner not found!"});
 
   const ownerId = ownerData[0].userId;
 
