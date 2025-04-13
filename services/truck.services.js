@@ -34,7 +34,7 @@ export const getDbAllTrucks = async (req, res) => {
 
 export const getDbAvailableTrucksByType = async (truckType) => { 
 
-  const q = "SELECT * FROM trucks WHERE truck_type = ? AND availability = true"
+  const q = "SELECT * FROM trucks WHERE truck_type = ? AND availability = 1"
 
   try {
     const response = await conn.query(q, [truckType]);
@@ -47,7 +47,7 @@ export const getDbAvailableTrucksByType = async (truckType) => {
 
 export const upDateDbTruckAvailability= async (truckId) => { 
 
-  const q = "UPDATE trucks SET `availability` = '1' WHERE truckId = ?"; 
+  const q = "UPDATE trucks SET `availability` = 1 - availability WHERE truckId = ?"; 
 
   // const q = "SELECT * FROM trucks WHERE truck_type = ? AND availability = true"
 

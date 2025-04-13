@@ -39,12 +39,12 @@ export const getDbUser = async (userPhoneNo) => {
   }  
 }
 
-export const getDbUserById = async (userId) => {
+export const getDbUserById = async (user_Id) => {
 
-  const q = "SELECT * FROM users WHERE userId IN (?)"
+  const q = "SELECT userId, name, last_name, email, phone, user_type, createdAt FROM users WHERE userId IN (?)"
 
   try {
-    const response = await conn.query(q, [userId]);
+    const response = await conn.query(q, [user_Id]);
     // console.log(response);
     return response[0];
   } catch (error) {

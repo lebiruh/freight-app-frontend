@@ -81,6 +81,10 @@ export const getAvailableTrucksByType = async(req, res) => {
   })
 
   const owner = await getDbUserById(ownerId);
+
+  // console.log("owner is: ", owner);
+
+  // const ownerToSendToFrontEnd = 
   
   const fullTruckInfo = [];
 

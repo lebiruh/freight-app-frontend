@@ -30,17 +30,17 @@ export const addDbFreightOrder = async (req, res) => {
   }
 }
 
-export const getDbPendingFreightOrders = async (req, res) => {
+export const getDbFreightOrdersByStatus = async (status) => {
 
   // const familyId = req.params.familyId;
 
   const q = `
-    SELECT * FROM freight
+    SELECT * FROM freight WHERE status = ?
     ORDER BY freight.createdAt DESC
   `;
 
   try {
-    const response = await conn.query(q);
+    const response = await conn.query(q, [status]);
     return response[0];
    } catch (error) {
     console.log(error);
@@ -70,6 +70,21 @@ export const getDbPendingFreightOrdersBySearch = async (searchTerm) => {
 
   try {
     const response = await conn.query(q, [`${searchTerm}%`, `${searchTerm}%`]);
+    return response[0];
+  } catch (error) {
+    console.log(error);
+  }  
+}
+
+export const upDateDbOrderStatus= async (action, id) => { 
+
+  const q = "UPDATE freight SET status = ? WHERE freightId = ?"; 
+
+  // const q = "SELECT * FROM trucks WHERE truck_type = ? AND availability = true"
+
+  try {
+    const response = await conn.query(q, [action, id]);
+    // console.log(response);
     return response[0];
   } catch (error) {
     console.log(error);
