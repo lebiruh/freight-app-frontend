@@ -1,29 +1,29 @@
 import conn from "../config/db.config.js";
 // import { query } from "../config/db.config.js";
-import moment from "moment";
 
-export const addDbFreightOrder = async (req, res) => {
+
+export const addDbFreightOrder = async (values) => {
 
   const q = "INSERT INTO freight (`clientId`, `type`, `weight`, `weight_unit`, `price`, `price_unit`, `start_location`, `end_location`, `status`, `createdAt`) VALUES (?)"
 
-  const values = [
-    req.body.userId,
-    req.body.truck,
-    req.body.weight,
-    req.body.weightUnit,
-    req.body.price,
-    req.body.priceUnit,
-    req.body.source,
-    req.body.destination,
-    req.body.status,
-    // req.params.familyId,
-    // req.body.content,
-    // req.body?.image,
-    moment(Date.now()).format("YYYY-MM-DD HH:mm:ss")
-  ]
-
   try {
     const response = await conn.query(q, [values]);
+    return response[0];
+   } catch (error) {
+    console.log(error);
+  }
+}
+
+export const addDbBooking = async (bookingValues) => {
+
+  
+  const bookingQuery = "INSERT INTO booking (`freightId`, `truckId`, `booking_status`, `createdAt`) VALUES (?)"
+
+  // const truckQuery = "UPDATE trucks SET `availability` = 1 - availability WHERE truckId = ?";
+
+  // const freightQuery = 
+  try {
+    const response = await conn.query(bookingQuery, [bookingValues]);
     return response[0];
    } catch (error) {
     console.log(error);
@@ -41,6 +41,24 @@ export const getDbFreightOrdersByStatus = async (status) => {
 
   try {
     const response = await conn.query(q, [status]);
+    return response[0];
+   } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getDbBookingsByStatus = async (status) => {
+
+  // const familyId = req.params.familyId;
+
+  const q = `
+    SELECT b.freightId, b.truckId, b.booking_status, f.clientId AS clientId, f.type AS type, f.weight AS weight, f.weight_unit AS weight_unit, f.price AS price, f.price_unit AS price_unit, f.start_location AS start_location, f.end_location AS end_location, f.status AS status, f.createdAt AS createdAt FROM booking b JOIN freight f ON b.freightId = f.freightId WHERE b.booking_status = ?
+    ORDER BY f.createdAt DESC
+  `;
+
+  try {
+    const response = await conn.query(q, [status]);
+    // console.log(response);
     return response[0];
    } catch (error) {
     console.log(error);
@@ -80,10 +98,29 @@ export const upDateDbOrderStatus= async (action, id) => {
 
   const q = "UPDATE freight SET status = ? WHERE freightId = ?"; 
 
-  // const q = "SELECT * FROM trucks WHERE truck_type = ? AND availability = true"
+  // const bookingQuery = "INSERT INTO booking (`freightId`, `truckId`, `booking_status`, `createdAt`) VALUES (?)"
 
   try {
     const response = await conn.query(q, [action, id]);
+
+    // const bookingStatus = await conn.query(bookingQuery, [bookingValues])
+    // console.log(response);
+    return response[0];
+  } catch (error) {
+    console.log(error);
+  }  
+}
+
+export const upDateDbBookingStatus= async (action, id) => { 
+
+  const q = "UPDATE booking SET booking_status = ? WHERE freightId = ?"; 
+
+  // const bookingQuery = "INSERT INTO booking (`freightId`, `truckId`, `booking_status`, `createdAt`) VALUES (?)"
+
+  try {
+    const response = await conn.query(q, [action, id]);
+
+    // const bookingStatus = await conn.query(bookingQuery, [bookingValues])
     // console.log(response);
     return response[0];
   } catch (error) {

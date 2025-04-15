@@ -15,10 +15,4 @@ const dbConfig = {
 // Create the connection pool
 const pool = mysql.createPool(dbConfig);
 
-// Create an async function to execute the sql queries
-// export const query = async (sql, params) => {
-//   const [rows] = await pool.execute(sql, params);
-//   return rows;
-// }
-
 export default pool;
