@@ -82,12 +82,28 @@ export const getDbPendingFreightOrderById = async (jobId) => {
   }
 };
 
-export const getDbPendingFreightOrdersBySearch = async (searchTerm) => {  
+export const getDbPendingFreightOrdersBySearch = async (searchTerm) => {
 
-  const q = "SELECT * FROM freight WHERE start_location LIKE ? OR end_location LIKE ?"
+  const letters = [...new Set(searchTerm.toLowerCase())];
+  
+  const startLocationConditions = letters.map(letter => `start_location LIKE ?`).join(' AND ');
+  const endLocationConditions = letters.map(letter => `end_location LIKE ?`).join(' AND ');
+
+  // const values = letters.map(letter => `%${letter}%`);
+
+  const startLocationValues = letters.map(letter => `%${letter}%`);
+  const endLocationValues = letters.map(letter => `%${letter}%`);
+
+  const values = [...startLocationValues, ...endLocationValues];
+
+  const q = `SELECT * FROM freight WHERE ${startLocationConditions} OR ${endLocationConditions}`
+
+
+  // const q = "SELECT * FROM freight WHERE start_location LIKE ? OR end_location LIKE ?"
 
   try {
-    const response = await conn.query(q, [`${searchTerm}%`, `${searchTerm}%`]);
+    // const response = await conn.query(q, [`${searchTerm}%`, `${searchTerm}%`]);
+    const response = await conn.query(q, values);
     return response[0];
   } catch (error) {
     console.log(error);
