@@ -1,4 +1,4 @@
-import {addDbBooking, addDbFreightOrder, getDbBookingsByStatus, getDbFreightOrdersByStatus, getDbPendingFreightOrderById, getDbPendingFreightOrdersBySearch, upDateDbBookingStatus, upDateDbOrderStatus} from '../services/order.services.js'
+import {addDbBooking, addDbFreightOrder, getDbBookingsByStatus, getDbBookingsSalesData, getDbFreightOrdersByStatus, getDbPendingFreightOrderById, getDbPendingFreightOrdersBySearch, upDateDbBookingStatus, upDateDbOrderStatus} from '../services/order.services.js'
 
 import moment from "moment";
 import { upDateDbTruckAvailability } from '../services/truck.services.js';
@@ -40,7 +40,7 @@ export const getFreightOrdersByStatus = async (req, res) => {
 
     const status = req.params.status;
 
-    if(status === 'pending') {
+    if(status === 'pending' || status === 'cancelled') {
 
       const response =  await getDbFreightOrdersByStatus(status);
 
@@ -50,6 +50,28 @@ export const getFreightOrdersByStatus = async (req, res) => {
     }
 
     const response =  await getDbBookingsByStatus(status);
+
+    if (!response)  return res.status(500).json({message: "Something went wrong. Please try again later."});
+
+    return res.status(200).json(response);
+
+    
+  
+};
+export const getFreightOrdersSalesData = async (req, res) => {
+
+    const status = req.params.status;
+
+    // if(status === 'pending' || status === 'cancelled') {
+
+    //   const response =  await getDbFreightOrdersByStatus(status);
+
+    //   if (!response)  return res.status(500).json({message: "Something went wrong. Please try again later."});
+
+    //   return res.status(200).json(response);
+    // }
+
+    const response =  await getDbBookingsSalesData(status);
 
     if (!response)  return res.status(500).json({message: "Something went wrong. Please try again later."});
 

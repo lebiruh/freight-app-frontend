@@ -65,6 +65,62 @@ export const getDbBookingsByStatus = async (status) => {
   }
 };
 
+export const getDbBookingsSalesData = async (status) => {
+
+  // const familyId = req.params.familyId;
+  //  f.clientId AS clientId, f.status AS status,
+
+  // const q = `
+  //   SELECT b.freightId, b.truckId, b.booking_status, f.type AS type, f.weight AS TotalWeight, f.weight_unit AS weight_unit, f.price AS price, f.price_unit AS price_unit, f.start_location AS start_location, f.end_location AS end_location, f.createdAt AS createdAt, u.name AS first_name, u.last_name AS last_name, u.phone AS phone_number, u.user_type AS user_type FROM booking b JOIN freight f ON b.freightId = f.freightId JOIN users u ON f.clientId = u.userId WHERE b.booking_status = ?
+  //   ORDER BY f.createdAt DESC
+  // `;
+  const q = `
+    SELECT
+      b.freightId,
+      b.truckId,
+      b.booking_status,
+      f.type AS type,
+      f.weight AS TotalWeight,
+      f.weight_unit AS weight_unit,
+      f.price AS price,
+      f.price_unit AS price_unit,
+      f.start_location AS start_location,
+      f.end_location AS end_location,
+      f.createdAt AS createdAt,
+      t.ownerId AS owner_id,
+      client_u.name AS client_first_name,
+      client_u.last_name AS client_last_name,
+      client_u.phone AS client_phone_number,
+      client_u.user_type AS client_user_type,
+      owner_u.name AS owner_first_name,
+      owner_u.last_name AS owner_last_name,
+      owner_u.phone AS owner_phone_number,
+      owner_u.user_type AS owner_user_type
+    FROM
+      booking b
+    JOIN
+      freight f ON b.freightId = f.freightId
+    JOIN
+      trucks t ON b.truckId = t.truckId
+    LEFT JOIN
+      users client_u ON f.clientId = client_u.userId
+    LEFT JOIN
+      users owner_u ON t.ownerId = owner_u.userId 
+    WHERE
+      b.booking_status = ?
+    ORDER BY
+      f.createdAt DESC
+  `;
+
+  try {
+    const response = await conn.query(q, [status]);
+    // console.log(response);
+    return response[0];
+   } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getDbPendingFreightOrderById = async (jobId) => {
 
   // const jobId = req.params;

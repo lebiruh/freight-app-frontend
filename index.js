@@ -15,6 +15,7 @@ import getAllTrucksRoutes from "./routes/getAllTrucks.route.js";
 import getTrucksByTypeRoutes from "./routes/getTrucksByType.route.js";
 import upDateTruckAvailabilityRoutes from "./routes/upDateTruckAvailability.route.js"
 import upDateOrderStatusRoutes from "./routes/updateOrderStatus.route.js"
+import getOrderSalesDataRoute from "./routes/getOrderSalesData.route.js"
 
 
 
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use("/api/order", addOrderRoute);
 app.use("/api/orders", getOrdersByStatusRoutes);
+app.use("/api/orders/sales", getOrderSalesDataRoute);
 app.use("/api/find-order", getPendingOrderByIdRoutes);
 app.use("/api/find-orders/pending", getPendingOrdersBySearchRoutes);
 app.use("/api/admin", getUserByRoleRoutes);
