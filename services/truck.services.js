@@ -34,7 +34,9 @@ export const getDbAllTrucks = async (req, res) => {
 
 export const getDbAvailableTrucksByType = async (truckType) => { 
 
-  const q = "SELECT t.*, o.name AS owner_name, o.last_name AS owner_lastname, o.phone AS owner_phone FROM trucks t JOIN users o ON t.ownerId = o.userId WHERE t.truck_type = ? AND t.availability = 1"
+  // const q = "SELECT t.*, o.name AS owner_name, o.last_name AS owner_lastname, o.phone AS owner_phone FROM trucks t JOIN users o ON t.ownerId = o.userId WHERE t.truck_type = ? AND t.availability = 1"
+
+  const q = "SELECT t.*, o.name AS owner_name, o.last_name AS owner_lastname, o.phone AS owner_phone FROM trucks t JOIN users o ON t.ownerId = o.userId WHERE t.load_amount <= ? AND t.availability = 1"
 
   try {
     const response = await conn.query(q, [truckType]);

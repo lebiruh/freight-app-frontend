@@ -4,7 +4,7 @@ import conn from "../config/db.config.js";
 
 export const addDbFreightOrder = async (values) => {
 
-  const q = "INSERT INTO freight (`clientId`, `type`, `weight`, `weight_unit`, `price`, `price_unit`, `start_location`, `end_location`, `status`, `createdAt`) VALUES (?)"
+  const q = "INSERT INTO freight (`clientId`, `type`, `weight`, `weight_unit`, `remaining_weight`, `price`, `price_unit`, `start_location`, `start_lat`, `start_lon`, `end_location`, `end_lat`, `end_lon`, `status`, `createdAt`) VALUES (?)"
 
   try {
     const response = await conn.query(q, [values]);
@@ -17,7 +17,7 @@ export const addDbFreightOrder = async (values) => {
 export const addDbBooking = async (bookingValues) => {
 
   
-  const bookingQuery = "INSERT INTO booking (`freightId`, `truckId`, `booking_status`, `createdAt`) VALUES (?)"
+  const bookingQuery = "INSERT INTO booking (`freightId`, `truckId`, `booking_status`, `assigned_weight`, `createdAt`) VALUES (?)"
 
   // const truckQuery = "UPDATE trucks SET `availability` = 1 - availability WHERE truckId = ?";
 
@@ -52,13 +52,30 @@ export const getDbBookingsByStatus = async (status) => {
   // const familyId = req.params.familyId;
 
   const q = `
-    SELECT b.freightId, b.truckId, b.booking_status, f.clientId AS clientId, f.type AS type, f.weight AS weight, f.weight_unit AS weight_unit, f.price AS price, f.price_unit AS price_unit, f.start_location AS start_location, f.end_location AS end_location, f.status AS status, f.createdAt AS createdAt FROM booking b JOIN freight f ON b.freightId = f.freightId WHERE b.booking_status = ?
+    SELECT b.bookingId, b.freightId, b.truckId, b.booking_status, b.assigned_weight, f.clientId AS clientId, f.type AS type, f.weight AS weight, f.weight_unit AS weight_unit, f.price AS price, f.price_unit AS price_unit, f.start_location AS start_location, f.end_location AS end_location, f.status AS status, f.createdAt AS createdAt FROM booking b JOIN freight f ON b.freightId = f.freightId WHERE b.booking_status = ?
     ORDER BY f.createdAt DESC
   `;
 
   try {
     const response = await conn.query(q, [status]);
     // console.log(response);
+    return response[0];
+   } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getDbBookingById = async (jobId) => {
+
+  // const jobId = req.params;
+
+  // console.log("Job Id is: ", jobId);
+  // console.log("params is: ", req.params);
+
+  const q = "SELECT * FROM booking WHERE bookingId = ?";
+
+  try {
+    const response = await conn.query(q, [jobId]);
     return response[0];
    } catch (error) {
     console.log(error);
@@ -183,9 +200,26 @@ export const upDateDbOrderStatus= async (action, id) => {
   }  
 }
 
+export const upDateDbOrderRemainingWeight= async (remainingWeight, id) => { 
+
+  const q = "UPDATE freight SET remaining_weight = ? WHERE freightId = ?"; 
+
+  // const bookingQuery = "INSERT INTO booking (`freightId`, `truckId`, `booking_status`, `createdAt`) VALUES (?)"
+
+  try {
+    const response = await conn.query(q, [remainingWeight, id]);
+
+    // const bookingStatus = await conn.query(bookingQuery, [bookingValues])
+    // console.log(response);
+    return response[0];
+  } catch (error) {
+    console.log(error);
+  }  
+}
+
 export const upDateDbBookingStatus= async (action, id) => { 
 
-  const q = "UPDATE booking SET booking_status = ? WHERE freightId = ?"; 
+  const q = "UPDATE booking SET booking_status = ? WHERE bookingId = ?"; 
 
   // const bookingQuery = "INSERT INTO booking (`freightId`, `truckId`, `booking_status`, `createdAt`) VALUES (?)"
 
@@ -199,3 +233,48 @@ export const upDateDbBookingStatus= async (action, id) => {
     console.log(error);
   }  
 }
+
+// export const assignTrucksToOrder = async (bookingValues) => {
+
+//   const bookingQuery = "INSERT INTO booking (`freightId`, `truckId`, `booking_status`, `assigned_weight`, `createdAt`) VALUES (?)";
+
+//   const updateTruck = "UPDATE trucks SET `availability` = 1 - availability WHERE truckId = ?"; 
+
+//   const updateFreight = "UPDATE freight SET status = ? WHERE freightId = ?";
+
+//   const truckId = bookingValues[1]
+
+//   const freightId = bookingValues[0]
+
+//   const action = bookingValues[2]
+
+//   const connection = await conn.getConnection();
+
+//   try {
+
+//     await connection.beginTransaction();
+
+//     // for (const truck of trucks) {
+//       await connection.execute(bookingQuery, [bookingValues])
+
+//       await connection.execute(updateTruck, [truckId])
+
+//       await connection.execute(updateFreight, [action, freightId])
+//     // }
+
+//     await connection.commit();
+
+//     return {message: 'Trucks assigned successfully'}
+    
+//   } catch (error) {
+
+//     await connection.rollback();
+
+//     console.log(error);
+    
+//   } finally {
+//     connection.release();
+//   }
+
+
+// }

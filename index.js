@@ -16,6 +16,7 @@ import getTrucksByTypeRoutes from "./routes/getTrucksByType.route.js";
 import upDateTruckAvailabilityRoutes from "./routes/upDateTruckAvailability.route.js"
 import upDateOrderStatusRoutes from "./routes/updateOrderStatus.route.js"
 import getOrderSalesDataRoute from "./routes/getOrderSalesData.route.js"
+import upDateBookingStatusRoute from "./routes/updateBookingStatus.route.js"
 
 
 
@@ -44,6 +45,7 @@ app.use("/api/trucks", getAllTrucksRoutes);
 app.use("/api/available", getTrucksByTypeRoutes);
 app.use("/api/update/availability", upDateTruckAvailabilityRoutes);
 app.use("/api/status", upDateOrderStatusRoutes);
+app.use("/api/booking", upDateBookingStatusRoute);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

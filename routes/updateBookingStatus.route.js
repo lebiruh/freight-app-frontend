@@ -7,8 +7,8 @@ import { updateBookingStatus, updateOrderStatus } from '../controllers/order.con
 const router = express.Router();
 
 
-router.patch('/update-status', updateOrderStatus);
+// router.patch('/update-status', updateOrderStatus);
 
-// router.patch('/update-booking_status', updateBookingStatus);
+router.patch('/update-booking/status', updateBookingStatus);
 
 export default router;
